@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e            # fail fast
+set -o pipefail   # don't ignore exit codes when piping output
+# set -x          # enable debugging
+
+# Configure directories
+build_dir=$1
+cache_dir=$2
+env_dir=$3
+bp_dir=$(cd $(dirname $0); cd ..; pwd)
+
+# CF Common
+export BUILDPACK_PATH=$bp_dir
+source $bp_dir/compile-extensions/lib/common
+# END CF Common
+
+# Add postgres client binaries and libraries to path
+echo "Adding Postgres client support"
+tar xzf $bp_dir/vendor/pg.tar.gz -C $build_dir/vendor/
+
+# Update the PATH
+echo "Building runtime environment"
+mkdir -p $build_dir/.profile.d
+echo "export PATH=\"\$HOME/bin:\$HOME/vendor/:\$PATH\";" > $build_dir/.profile.d/postgres-client.sh
+echo "export LD_LIBRARY_PATH=\"\$HOME/vendor/libs/\";" >> $build_dir/.profile.d/postgres-client.sh
