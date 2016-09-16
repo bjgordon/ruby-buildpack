@@ -16,11 +16,11 @@ source $bp_dir/compile-extensions/lib/common
 # END CF Common
 
 # Add postgres client binaries and libraries to path
-echo "Adding Postgres client support"
-tar xzf $bp_dir/vendor/pg.tar.gz -C $build_dir/vendor/
+echo "-----> Adding Postgres client support"
+tar xzf $bp_dir/vendor/postgresql-client.tar.gz -C $build_dir/vendor/
 
 # Update the PATH
-echo "Building runtime environment"
+echo "-----> Building runtime environment"
 mkdir -p $build_dir/.profile.d
 echo "export PATH=\"\$HOME/bin:\$HOME/vendor/:\$PATH\";" > $build_dir/.profile.d/postgres-client.sh
 echo "export LD_LIBRARY_PATH=\"\$HOME/vendor/libs/\";" >> $build_dir/.profile.d/postgres-client.sh
